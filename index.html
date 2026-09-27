@@ -1,85 +1,197 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Thimmo WebForge — ready-made professional websites for businesses, creators and stores.">
-<title>Thimmo WebForge — Websites That Sell</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
-</head>
-<body>
-<header class="header">
-  <a href="#home" class="brand"><span class="brand-icon">W</span><span>Web<span>Forge</span></span></a>
-  <button class="hamb" id="hamb">☰</button>
-  <nav id="nav"><a href="#templates">Websites</a><a href="#how">How it works</a><a href="#custom">Custom</a><a href="#faq">FAQ</a><a class="nav-btn" href="#templates">Browse websites</a></nav>
-</header>
+const products = [
+  {
+    name: "Business Starter",
+    category: "business",
+    price: "1,500 DH",
+    description: "A clean professional website for a growing business."
+  },
+  {
+    name: "Restaurant Pro",
+    category: "restaurant",
+    price: "1,800 DH",
+    description: "A modern restaurant website designed to showcase your menu."
+  },
+  {
+    name: "Online Store",
+    category: "store",
+    price: "2,500 DH",
+    description: "A professional storefront for your products."
+  },
+  {
+    name: "Creator Portfolio",
+    category: "portfolio",
+    price: "1,500 DH",
+    description: "A modern portfolio for creators and professionals."
+  }
+];
 
-<main>
-<section class="hero" id="home">
-  <div class="hero-bg"></div>
-  <div class="hero-copy">
-    <div class="pill">⚡ READY-TO-LAUNCH WEBSITES</div>
-    <h1>Don't start from<br><em>zero.</em> Start selling.</h1>
-    <p>Professional websites, built by Thimmo WebForge and ready for your business. Pick a design, customize it, and get online faster.</p>
-    <div class="actions"><a class="btn primary" href="#templates">Explore websites <b>→</b></a><a class="btn secondary" href="#custom">Need something custom?</a></div>
-    <div class="trust"><span>✓ Mobile ready</span><span>✓ Modern design</span><span>✓ Easy to customize</span></div>
-  </div>
-  <div class="hero-showcase">
-    <div class="browser back"><div class="bar"></div><div class="fake-content restaurant"><b>EMBER & OAK</b><span>GOOD FOOD.<br><i>SLOW FIRE.</i></span></div></div>
-    <div class="browser front"><div class="bar"><i></i><i></i><i></i></div><div class="fake-content business"><small>WEBFORGE TEMPLATE</small><h3>Grow your<br><em>business.</em></h3><button>Get Started →</button><div class="fake-cards"><i></i><i></i><i></i></div></div></div>
-    <div class="price-float"><small>STARTING FROM</small><strong>1,500 DH</strong><span>One-time</span></div>
-  </div>
-</section>
+const productsContainer = document.getElementById("products");
+const filters = document.querySelectorAll(".filters button");
 
-<section class="stats"><div><strong>20+</strong><span>ready templates</span></div><div><strong>100%</strong><span>responsive</span></div><div><strong>1×</strong><span>one-time payment</span></div><div><strong>24/7</strong><span>online presence</span></div></section>
+function showProducts(filter = "all") {
+  productsContainer.innerHTML = "";
 
-<section class="section" id="templates">
-  <div class="section-head"><div><small class="eyebrow">OUR COLLECTION</small><h2>Pick your next website.</h2></div><p>Ready-made websites for restaurants, businesses, portfolios and online stores. More templates can be added anytime.</p></div>
-  <div class="filters"><button class="active" data-filter="all">All</button><button data-filter="restaurant">Restaurant</button><button data-filter="business">Business</button><button data-filter="store">Store</button><button data-filter="portfolio">Portfolio</button></div>
-  <div class="products" id="products"></div>
-</section>
+  const filtered = filter === "all"
+    ? products
+    : products.filter(product => product.category === filter);
 
-<section class="how section" id="how">
-  <div class="section-head centered"><small class="eyebrow">HOW IT WORKS</small><h2>From idea to website.</h2></div>
-  <div class="steps">
-    <article><b>01</b><span>01</span><h3>Choose a website</h3><p>Browse our ready-made designs and find one that fits your business.</p></article>
-    <article><b>02</b><span>02</span><h3>Tell us your details</h3><p>Send your name, logo, colors, text, photos and business information.</p></article>
-    <article><b>03</b><span>03</span><h3>We customize it</h3><p>We replace the demo content and prepare your site for launch.</p></article>
-    <article><b>04</b><span>04</span><h3>Go online</h3><p>Receive your finished website files or have us help you publish it.</p></article>
-  </div>
-</section>
+  filtered.forEach(product => {
+    const card = document.createElement("article");
+    card.className = "product";
+    card.innerHTML = `
+      <div class="product-image">
+        <span>${product.category.toUpperCase()}</span>
+      </div>
+      <div class="product-info">
+        <small>${product.category}</small>
+        <h3>${product.name}</h3>
+        <p>${product.description}</p>
+        <strong>${product.price}</strong>
+        <button class="btn primary order-btn">Order →</button>
+      </div>
+    `;
 
-<section class="custom section" id="custom">
-  <div class="custom-code"><div class="codebar"><i></i><i></i><i></i><span>your-website.html</span></div><pre><code><span>&lt;section</span> class=<em>"your-brand"</em><span>&gt;</span>
-  <b>Your idea.</b>
-  <b>Your style.</b>
-  <b>Your website.</b>
-<span>&lt;/section&gt;</span></code></pre></div>
-  <div class="custom-copy"><small class="eyebrow">CUSTOM WEBSITES</small><h2>Can't find what you need?</h2><p>We'll build a website specifically for your business — from the design to the features and content structure.</p><ul><li>Custom design</li><li>Business features</li><li>Mobile responsive</li><li>Personalized content</li></ul><a class="btn primary" href="#contact">Request a custom website →</a></div>
-</section>
+    card.querySelector(".order-btn").addEventListener("click", () => {
+      openOrder(product);
+    });
 
-<section class="why section">
- <div class="section-head"><div><small class="eyebrow">WHY WEBFORGE</small><h2>Built to look<br><em>professional.</em></h2></div></div>
- <div class="benefits"><div><b>✦</b><h3>Modern designs</h3><p>Clean interfaces designed to make businesses look credible online.</p></div><div><b>↗</b><h3>Responsive</h3><p>Your website adapts to phones, tablets and desktop screens.</p></div><div><b>⚡</b><h3>Fast delivery</h3><p>Start from a finished template instead of building everything from scratch.</p></div><div><b>◇</b><h3>Customizable</h3><p>Colors, text, images, menus and sections can be changed for each client.</p></div></div>
-</section>
+    productsContainer.appendChild(card);
+  });
+}
 
-<section class="faq section" id="faq"><div class="section-head centered"><small class="eyebrow">FAQ</small><h2>Questions, answered.</h2></div>
-<div class="faq-list">
-<details><summary>Do I buy a website or a subscription? <b>+</b></summary><p>Thimmo WebForge templates are presented as one-time website purchases. Hosting, domains and third-party services can be handled separately.</p></details>
-<details><summary>Can I request changes? <b>+</b></summary><p>Yes. Send your business information and the changes you need. Custom work can be quoted separately.</p></details>
-<details><summary>Can I use the website for my business? <b>+</b></summary><p>Yes. After the purchase/customization process, the website can be prepared for the buyer's business. Your own sales terms should define exactly what is included.</p></details>
-<details><summary>How do I pay? <b>+</b></summary><p>This storefront uses an order-request flow. Connect the order button to your preferred payment provider or WhatsApp when you are ready to accept payments online.</p></details>
-</div></section>
+filters.forEach(button => {
+  button.addEventListener("click", () => {
+    filters.forEach(btn => btn.classList.remove("active"));
+    button.classList.add("active");
+    showProducts(button.dataset.filter);
+  });
+});
 
-<section class="contact section" id="contact">
- <div><small class="eyebrow">LET'S BUILD</small><h2>Ready to get<br><em>online?</em></h2><p>Tell us what you need and we'll get back to you with the next steps.</p></div>
- <form id="contactForm"><label>Name<input required name="name" placeholder="Your name"></label><label>Email<input required type="email" name="email" placeholder="you@example.com"></label><label>What do you need?<select name="type"><option>Ready-made website</option><option>Custom website</option><option>I'm not sure yet</option></select></label><label>Message<textarea required name="message" rows="4" placeholder="Tell us about your business..."></textarea></label><button class="btn primary" type="submit">Send request →</button></form>
-</section>
-</main>
+const modal = document.getElementById("orderModal");
+const closeButton = document.getElementById("close");
+const orderTitle = document.getElementById("orderTitle");
+const orderDesc = document.getElementById("orderDesc");
+const orderPrice = document.getElementById("orderPrice");
+const orderForm = document.getElementById("orderForm");
 
-<footer><div class="footer-brand"><a class="brand" href="#home"><span class="brand-icon">W</span><span>Web<span>Forge</span></span></a><p>Websites that help businesses get online.</p></div><div><b>Explore</b><a href="#templates">Websites</a><a href="#custom">Custom websites</a><a href="#faq">FAQ</a></div><div><b>Contact</b><a href="#contact">Request a website</a><a href="mailto:hello@webforge.example">hello@webforge.example</a></div><div class="copyright">© 2026 Thimmo WebForge. All rights reserved.</div></footer>
+let selectedProduct = null;
 
-<div class="modal" id="orderModal"><div class="modal-box"><button class="close" id="close">×</button><small class="eyebrow">ORDER WEBSITE</small><h2 id="orderTitle">Website</h2><p id="orderDesc"></p><div class="selected-price" id="orderPrice"></div><form id="orderForm"><input required name="name" placeholder="Your name"><input required type="email" name="email" placeholder="Email address"><input name="business" placeholder="Business / brand name"><textarea name="notes" rows="3" placeholder="Anything you want customized?"></textarea><button class="btn primary" type="submit">Request this website →</button></form><small class="note">This sends an order request. Connect your preferred payment method before taking real payments.</small></div></div>
-<script src="script.js"></script>
-</body></html>
+function openOrder(product) {
+  selectedProduct = product;
+
+  orderTitle.textContent = product.name;
+  orderDesc.textContent = product.description;
+  orderPrice.textContent = product.price;
+
+  modal.classList.add("open");
+}
+
+closeButton.addEventListener("click", () => {
+  modal.classList.remove("open");
+});
+
+modal.addEventListener("click", event => {
+  if (event.target === modal) {
+    modal.classList.remove("open");
+  }
+});
+
+orderForm.addEventListener("submit", event => {
+  event.preventDefault();
+
+  const formData = new FormData(orderForm);
+
+  const name = formData.get("name");
+  const email = formData.get("email");
+  const business = formData.get("business") || "Not provided";
+  const notes = formData.get("notes") || "No additional details";
+
+  const whatsappNumber = "212656475067";
+
+  const message =
+`🛒 NEW WEBSITE ORDER
+
+🌐 Thimmo WebForge
+
+📦 Website:
+${selectedProduct ? selectedProduct.name : "Website"}
+
+💰 Price:
+${selectedProduct ? selectedProduct.price : "To be confirmed"}
+
+👤 Customer:
+${name}
+
+📧 Email:
+${email}
+
+🏢 Business / Brand:
+${business}
+
+📝 Customization:
+${notes}
+
+Please contact me to confirm the order.`;
+
+  const whatsappURL =
+    "https://wa.me/" +
+    whatsappNumber +
+    "?text=" +
+    encodeURIComponent(message);
+
+  window.open(whatsappURL, "_blank");
+
+  modal.classList.remove("open");
+  orderForm.reset();
+});
+
+const contactForm = document.getElementById("contactForm");
+
+contactForm.addEventListener("submit", event => {
+  event.preventDefault();
+
+  const formData = new FormData(contactForm);
+
+  const name = formData.get("name");
+  const email = formData.get("email");
+  const type = formData.get("type");
+  const message = formData.get("message");
+
+  const whatsappNumber = "212656475067";
+
+  const whatsappMessage =
+`👋 NEW CONTACT REQUEST
+
+🌐 Thimmo WebForge
+
+👤 Name:
+${name}
+
+📧 Email:
+${email}
+
+💼 Request:
+${type}
+
+📝 Message:
+${message}`;
+
+  const whatsappURL =
+    "https://wa.me/" +
+    whatsappNumber +
+    "?text=" +
+    encodeURIComponent(whatsappMessage);
+
+  window.open(whatsappURL, "_blank");
+
+  contactForm.reset();
+});
+
+const hamburger = document.getElementById("hamb");
+const nav = document.getElementById("nav");
+
+hamburger.addEventListener("click", () => {
+  nav.classList.toggle("open");
+});
+
+showProducts();
