@@ -1,174 +1,133 @@
-const whatsappNumber = "212656475067";
-
 const products = [
   {
-    id: 1,
     name: "Business Starter",
     category: "business",
-    price: 1500,
-    description: "A professional website for small businesses and services."
+    price: "1,500 DH",
+    description: "A clean professional website for a growing business."
   },
   {
-    id: 2,
     name: "Restaurant Pro",
     category: "restaurant",
-    price: 1800,
-    description: "A modern restaurant website with menu and contact sections."
+    price: "1,800 DH",
+    description: "A modern restaurant website designed to showcase your menu."
   },
   {
-    id: 3,
     name: "Online Store",
     category: "store",
-    price: 2500,
-    description: "A clean online store layout for products and businesses."
+    price: "2,500 DH",
+    description: "A professional storefront for your products."
   },
   {
-    id: 4,
     name: "Creator Portfolio",
     category: "portfolio",
-    price: 1500,
-    description: "A stylish portfolio website for creators and professionals."
+    price: "1,500 DH",
+    description: "A modern portfolio for creators and professionals."
   }
 ];
 
-document.addEventListener("DOMContentLoaded", function () {
+const productsContainer = document.getElementById("products");
+const filters = document.querySelectorAll(".filters button");
 
-  const productsContainer = document.getElementById("products");
-  const filterButtons = document.querySelectorAll("[data-filter]");
+const modal = document.getElementById("orderModal");
+const closeButton = document.getElementById("close");
+const orderTitle = document.getElementById("orderTitle");
+const orderDesc = document.getElementById("orderDesc");
+const orderPrice = document.getElementById("orderPrice");
+const orderForm = document.getElementById("orderForm");
 
-  const modal = document.getElementById("orderModal");
-  const closeButton = document.getElementById("close");
-  const orderForm = document.getElementById("orderForm");
+let selectedProduct = null;
 
-  const orderTitle = document.getElementById("orderTitle");
-  const orderDesc = document.getElementById("orderDesc");
-  const orderPrice = document.getElementById("orderPrice");
+function showProducts(filter = "all") {
+  productsContainer.innerHTML = "";
 
-  let selectedProduct = null;
+  const filtered =
+    filter === "all"
+      ? products
+      : products.filter(product => product.category === filter);
 
-  function renderProducts(filter = "all") {
+  filtered.forEach(product => {
+    const card = document.createElement("article");
 
-    productsContainer.innerHTML = "";
+    card.className = "product";
 
-    const filteredProducts =
-      filter === "all"
-        ? products
-        : products.filter(product => product.category === filter);
+    card.innerHTML = `
+      <div class="product-image">
+        <span>${product.category.toUpperCase()}</span>
+      </div>
 
-    filteredProducts.forEach(product => {
+      <div class="product-info">
+        <small>${product.category}</small>
+        <h3>${product.name}</h3>
+        <p>${product.description}</p>
 
-      const card = document.createElement("article");
-      card.className = "product-card";
-
-      card.innerHTML = `
-        <div class="product-image">
-          <span>${product.category.toUpperCase()}</span>
+        <div class="product-bottom">
+          <strong>${product.price}</strong>
+          <button class="btn primary order-btn">
+            Order →
+          </button>
         </div>
+      </div>
+    `;
 
-        <div class="product-info">
-          <small>${product.category}</small>
-
-          <h3>${product.name}</h3>
-
-          <p>${product.description}</p>
-
-          <div class="product-bottom">
-            <strong>${product.price.toLocaleString()} DH</strong>
-
-            <button class="btn primary order-btn">
-              Order →
-            </button>
-          </div>
-        </div>
-      `;
-
-      const button = card.querySelector(".order-btn");
-
-      button.addEventListener("click", function () {
-        openOrder(product);
-      });
-
-      productsContainer.appendChild(card);
+    card.querySelector(".order-btn").addEventListener("click", () => {
+      openOrder(product);
     });
-  }
 
-  function openOrder(product) {
+    productsContainer.appendChild(card);
+  });
+}
 
-    selectedProduct = product;
+filters.forEach(button => {
+  button.addEventListener("click", () => {
+    filters.forEach(btn => btn.classList.remove("active"));
 
-    orderTitle.textContent = product.name;
-    orderDesc.textContent = product.description;
-    orderPrice.textContent =
-      product.price.toLocaleString() + " DH";
+    button.classList.add("active");
 
-    modal.classList.add("open");
-  }
+    showProducts(button.dataset.filter);
+  });
+});
 
-  function closeModal() {
+function openOrder(product) {
+  selectedProduct = product;
+
+  orderTitle.textContent = product.name;
+  orderDesc.textContent = product.description;
+  orderPrice.textContent = product.price;
+
+  modal.classList.add("open");
+}
+
+closeButton.addEventListener("click", () => {
+  modal.classList.remove("open");
+});
+
+modal.addEventListener("click", event => {
+  if (event.target === modal) {
     modal.classList.remove("open");
   }
+});
 
-  if (closeButton) {
-    closeButton.addEventListener("click", closeModal);
-  }
+orderForm.addEventListener("submit", event => {
+  event.preventDefault();
 
-  if (modal) {
-    modal.addEventListener("click", function (event) {
-      if (event.target === modal) {
-        closeModal();
-      }
-    });
-  }
+  const formData = new FormData(orderForm);
 
-  filterButtons.forEach(button => {
+  const name = formData.get("name") || "Not provided";
+  const email = formData.get("email") || "Not provided";
+  const business = formData.get("business") || "Not provided";
+  const notes = formData.get("notes") || "No additional details";
 
-    button.addEventListener("click", function () {
+  const whatsappNumber = "212656475067";
 
-      filterButtons.forEach(btn => {
-        btn.classList.remove("active");
-      });
+  const message = `🛒 NEW WEBSITE ORDER
 
-      button.classList.add("active");
-
-      renderProducts(button.dataset.filter);
-    });
-
-  });
-
-  if (orderForm) {
-
-    orderForm.addEventListener("submit", function (event) {
-
-      event.preventDefault();
-
-      if (!selectedProduct) {
-        return;
-      }
-
-      const formData = new FormData(orderForm);
-
-      const name =
-        formData.get("name") || "Not provided";
-
-      const email =
-        formData.get("email") || "Not provided";
-
-      const business =
-        formData.get("business") || "Not provided";
-
-      const notes =
-        formData.get("notes") || "No additional details";
-
-      const message =
-`🛒 NEW WEBSITE ORDER
-
-🌐 THIMMO WEBFORGE
+🌐 Thimmo WebForge
 
 📦 Website:
-${selectedProduct.name}
+${selectedProduct ? selectedProduct.name : "Website"}
 
 💰 Price:
-${selectedProduct.price.toLocaleString()} DH
+${selectedProduct ? selectedProduct.price : "To be confirmed"}
 
 👤 Customer:
 ${name}
@@ -184,18 +143,64 @@ ${notes}
 
 Please contact me to confirm the order.`;
 
-      const whatsappURL =
-        "https://wa.me/" +
-        whatsappNumber +
-        "?text=" +
-        encodeURIComponent(message);
+  const whatsappURL =
+    "https://wa.me/" +
+    whatsappNumber +
+    "?text=" +
+    encodeURIComponent(message);
 
-      window.open(whatsappURL, "_blank");
+  window.open(whatsappURL, "_blank");
 
-    });
-
-  }
-
-  renderProducts();
-
+  modal.classList.remove("open");
+  orderForm.reset();
 });
+
+const contactForm = document.getElementById("contactForm");
+
+contactForm.addEventListener("submit", event => {
+  event.preventDefault();
+
+  const formData = new FormData(contactForm);
+
+  const name = formData.get("name") || "Not provided";
+  const email = formData.get("email") || "Not provided";
+  const type = formData.get("type") || "Not specified";
+  const message = formData.get("message") || "No message";
+
+  const whatsappNumber = "212656475067";
+
+  const whatsappMessage = `👋 NEW CONTACT REQUEST
+
+🌐 Thimmo WebForge
+
+👤 Name:
+${name}
+
+📧 Email:
+${email}
+
+💼 Request:
+${type}
+
+📝 Message:
+${message}`;
+
+  const whatsappURL =
+    "https://wa.me/" +
+    whatsappNumber +
+    "?text=" +
+    encodeURIComponent(whatsappMessage);
+
+  window.open(whatsappURL, "_blank");
+
+  contactForm.reset();
+});
+
+const hamburger = document.getElementById("hamb");
+const nav = document.getElementById("nav");
+
+hamburger.addEventListener("click", () => {
+  nav.classList.toggle("open");
+});
+
+showProducts();
